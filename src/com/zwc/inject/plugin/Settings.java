@@ -11,13 +11,11 @@ import javax.swing.*;
 
 /**
  * Settings UI for the plugin.
- *
- * @author David Vávra (david@inmite.eu)
  */
 public class Settings implements Configurable {
 
-    public static final String PREFIX = "butterknifezelezny_prefix";
-    public static final String VIEWHOLDER_CLASS_NAME = "butterknifezelezny_viewholder_class_name";
+    public static final String PREFIX = "injectplugin_prefix";
+    public static final String VIEWHOLDER_CLASS_NAME = "injectplugin_viewholder_class_name";
 
     private JPanel mPanel;
     private JTextField mHolderName;
@@ -26,7 +24,7 @@ public class Settings implements Configurable {
     @Nls
     @Override
     public String getDisplayName() {
-        return "ButterKnifeZelezny";
+        return "injectplugin";
     }
 
     @Nullable

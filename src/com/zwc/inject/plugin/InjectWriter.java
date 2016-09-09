@@ -34,15 +34,17 @@ public class InjectWriter extends WriteCommandAction.Simple {
         mLayoutFileName = layoutFileName;
         mFieldNamePrefix = fieldNamePrefix;
         mCreateHolder = createHolder;
+
     }
 
     @Override
     public void run() throws Throwable {
+//注释判断是否有buuterknife库的代码
 //        PsiClass injectViewClass = JavaPsiFacade.getInstance(mProject).findClass("butterknife.InjectView", new EverythingGlobalScope(mProject));
 //        if (injectViewClass == null) {
 //            return; // Butterknife library is not available for project
 //        }
-
+//注释生成holder内部类的代码
 //        if (mCreateHolder) {
 //            generateAdapter();
 //        } else {
@@ -128,6 +130,7 @@ public class InjectWriter extends WriteCommandAction.Simple {
 //        mClass.addBefore(mFactory.createKeyword("static", mClass), mClass.findInnerClassByName(Utils.getViewHolderClassName(), true));
 //    }
     protected void generateClick() {
+//注释生成onclick(View view),通过switch判断id的代码
 //        StringBuilder method = new StringBuilder();
 //        if (Utils.getClickCount(mElements) == 1) {
 //            method.append("@OnClick(");
@@ -163,13 +166,10 @@ public class InjectWriter extends WriteCommandAction.Simple {
         for (Element element : mElements) {
             if (element.isClick) {
                 method.append(element.getFullID() + ")");
-                method.append("public void on"+element.fieldName+"Click() {}");
+                method.append("public void on" + element.fieldName + "Click() {}");
             }
         }
-
-
         mClass.add(mFactory.createMethodFromText(method.toString(), mClass));
-
     }
 
     /**
@@ -199,9 +199,10 @@ public class InjectWriter extends WriteCommandAction.Simple {
 
             mClass.add(mFactory.createFieldFromText(injection.toString(), mClass));
         }
+
     }
 
-    private boolean containsButterKnifeInjectLine(PsiMethod method, String line) {
+    private boolean containsBKnifeInjectLine(PsiMethod method, String line) {
         PsiStatement[] statements = method.getBody().getStatements();
         for (PsiStatement psiStatement : statements) {
             String statementAsString = psiStatement.getText();
@@ -234,7 +235,7 @@ public class InjectWriter extends WriteCommandAction.Simple {
                 mClass.add(mFactory.createMethodFromText(method.toString(), mClass));
             } else {
                 PsiMethod onCreate = mClass.findMethodsByName("onCreate", false)[0];
-                if (!containsButterKnifeInjectLine(onCreate, "BKnife.inject")) {
+                if (!containsBKnifeInjectLine(onCreate, "BKnife.inject")) {
                     for (PsiStatement statement : onCreate.getBody().getStatements()) {
                         // Search for setContentView()
                         if (statement.getFirstChild() instanceof PsiMethodCallExpression) {
@@ -266,7 +267,7 @@ public class InjectWriter extends WriteCommandAction.Simple {
                 mClass.add(mFactory.createMethodFromText(method.toString(), mClass));
             } else {
                 PsiMethod onCreateView = mClass.findMethodsByName("onCreateView", false)[0];
-                if (!containsButterKnifeInjectLine(onCreateView, "BKnife.inject")) {
+                if (!containsBKnifeInjectLine(onCreateView, "BKnife.inject")) {
                     for (PsiStatement statement : onCreateView.getBody().getStatements()) {
                         if (statement instanceof PsiReturnStatement) {
                             String returnValue = ((PsiReturnStatement) statement).getReturnValue().getText();
@@ -296,13 +297,24 @@ public class InjectWriter extends WriteCommandAction.Simple {
                 mClass.add(mFactory.createMethodFromText(method.toString(), mClass));
             } else {
                 PsiMethod onDestroyView = mClass.findMethodsByName("onDestroyView", false)[0];
-                if (!containsButterKnifeInjectLine(onDestroyView, "BKnife.reset")) {
+                if (!containsBKnifeInjectLine(onDestroyView, "BKnife.reset")) {
                     onDestroyView.getBody().addBefore(
                             mFactory.createStatementFromText("BKnife.reset(this);",
                                     mClass), onDestroyView.getBody().getLastBodyElement());
                 }
             }
+        } else {
+            PsiMethod initView = mClass.findMethodsByName("initView", false)[0];
+            if (!containsBKnifeInjectLine(initView, "BKnife.inject")) {
+                for (PsiStatement statement : initView.getBody().getStatements()) {
+                    if (statement.getFirstChild() instanceof PsiMethodCallExpression) {
+                        initView.getBody().addAfter(mFactory.createStatementFromText("BKnife.inject(this, view);", mClass), statement);
+                    }
+                }
+
+            }
         }
+
     }
 
 }

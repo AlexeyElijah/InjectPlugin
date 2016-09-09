@@ -7,7 +7,6 @@ import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
-import com.intellij.psi.search.EverythingGlobalScope;
 import com.intellij.psi.util.PsiUtilBase;
 import com.zwc.inject.plugin.common.Defintions;
 import com.zwc.inject.plugin.common.Utils;
@@ -35,15 +34,16 @@ public class InjectAction extends BaseGenerateAction implements IConfirmListener
 
 	@Override
 	protected boolean isValidForClass(final PsiClass targetClass) {
-		PsiClass injectViewClass = JavaPsiFacade.getInstance(targetClass.getProject()).findClass("butterknife.InjectView", new EverythingGlobalScope(targetClass.getProject()));
-
-		return (injectViewClass != null && super.isValidForClass(targetClass) && Utils.findAndroidSDK() != null && !(targetClass instanceof PsiAnonymousClass));
+		//取消判断是否加载了butterknife的逻辑
+//		PsiClass injectViewClass = JavaPsiFacade.getInstance(targetClass.getProject()).findClass("butterknife.InjectView", new EverythingGlobalScope(targetClass.getProject()));
+//		return (injectViewClass != null && super.isValidForClass(targetClass) && Utils.findAndroidSDK() != null && !(targetClass instanceof PsiAnonymousClass));
+	return true;
 	}
 
 	@Override
 	public boolean isValidForFile(Project project, Editor editor, PsiFile file) {
-		PsiClass injectViewClass = JavaPsiFacade.getInstance(project).findClass("butterknife.InjectView", new EverythingGlobalScope(project));
-		//pandu
+		//取消判断是否加载了butterknife的逻辑
+		//PsiClass injectViewClass = JavaPsiFacade.getInstance(project).findClass("butterknife.InjectView", new EverythingGlobalScope(project));
 		//return (injectViewClass != null && super.isValidForFile(project, editor, file) && Utils.getLayoutFileFromCaret(editor, file) != null);
 		return true;
 	}
