@@ -1,16 +1,16 @@
 <idea-plugin version="2">
-  <id>com.your.company.unique.plugin.id</id>
-  <name>Plugin display name here</name>
+  <id>com.zwc.inject.plugin</id>
+  <name>InjectPlugin</name>
   <version>1.0</version>
-  <vendor email="support@yourcompany.com" url="http://www.yourcompany.com">YourCompany</vendor>
+  <vendor email="support@zwc.com" url="http://www.zwc.com">zwc</vendor>
 
   <description><![CDATA[
-      Enter short description for your plugin here.<br>
+      注解用来代替findViewById和setOnClickListener,编译时期生成代码.<br>
       <em>most HTML tags may be used</em>
     ]]></description>
 
   <change-notes><![CDATA[
-      Add change notes here.<br>
+      <br>
       <em>most HTML tags may be used</em>
     ]]>
   </change-notes>
@@ -31,7 +31,7 @@
   <actions>
     <action id="AddInjectionsAction"
             class="com.zwc.inject.plugin.InjectAction"
-            text="Generate _Butterknife Injections"
+            text="Generate_BKnife_Injections"
             icon="/com/zwc/inject/plugin/icons/butterknife-zelezny.png"
             description="Plugin for generating ButterKnife injections from selected layout XMLs in activities/fragments/adapters">
       <!--<add-to-group group-id="GenerateGroup"/>-->
